@@ -7,8 +7,8 @@ import { StudentPortalService } from "./student-portal.service";
 export class ParsedStudentPortalService {
   constructor(private readonly studentPortalService: StudentPortalService) {}
 
-  public async GetParsedGrades() {
-    const response = await this.studentPortalService.GetGrades();
+  public async GetParsedGrades(sessionId: string) {
+    const response = await this.studentPortalService.GetGrades(sessionId);
     const $ = cheerio.load(response.data, { normalizeWhitespace: true });
     const subjects = [];
     $("#accordion").each((i, element) =>
@@ -60,18 +60,18 @@ export class ParsedStudentPortalService {
     return subjects;
   }
 
-  public async GetParsedProfile() {
-    const response = await this.studentPortalService.GetStudentProfile();
+  public async GetParsedProfile(sessionId: string) {
+    const response = await this.studentPortalService.GetStudentProfile(sessionId);
     const $ = cheerio.load(response.data, { normalizeWhitespace: true });
   }
 
-  public async GetParsedAccountBalance() {
-    const response = await this.studentPortalService.GetAccountBalance();
+  public async GetParsedAccountBalance(sessionId: string) {
+    const response = await this.studentPortalService.GetAccountBalance(sessionId);
     const $ = cheerio.load(response.data, { normalizeWhitespace: true });
   }
 
-  public async GetParsedEnrolledSubjects() {
-    const response = await this.studentPortalService.GetEnrolledSubjects();
+  public async GetParsedEnrolledSubjects(sessionId: string) {
+    const response = await this.studentPortalService.GetEnrolledSubjects(sessionId);
     const $ = cheerio.load(response.data, { normalizeWhitespace: true });
   }
 }
