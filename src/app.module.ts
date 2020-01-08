@@ -1,9 +1,11 @@
 import { Module } from "@nestjs/common";
+import { StudentPortalModule } from "cvsu-imus/student-portal";
+
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 
 @Module({
-  imports: [],
+  imports: [StudentPortalModule],
   controllers: [AppController],
   providers: [AppService],
 })
