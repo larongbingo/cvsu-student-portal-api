@@ -8,4 +8,4 @@ import { ParsedStudentPortalService } from "./parsed-student-portal.service";
   providers: [StudentPortalService, ParsedStudentPortalService],
   exports: [StudentPortalService, ParsedStudentPortalService],
 })
-export class StudentPortalModule {}
+export class CvsuImusPortalModule {}
