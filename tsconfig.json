@@ -13,10 +13,10 @@
     "esModuleInterop": true,
     "paths": {
       "cvsu-imus/student-portal": [
-        "libs/student-portal/src"
+        "libs/cvsu-imus-portal/src"
       ],
       "cvsu-imus/student-portal/*": [
-        "libs/student-portal/src/*"
+        "libs/cvsu-imus-portal/src/*"
       ]
     }
   },

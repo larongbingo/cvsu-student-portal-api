@@ -4,9 +4,9 @@
   "projects": {
     "student-portal": {
       "type": "library",
-      "root": "libs/student-portal",
+      "root": "libs/cvsu-imus-portal",
       "entryFile": "index",
-      "sourceRoot": "libs/student-portal/src",
+      "sourceRoot": "libs/cvsu-imus-portal/src",
       "compilerOptions": {
         "tsConfigPath": "libs/student-portal/tsconfig.lib.json"
       }

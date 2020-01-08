@@ -72,8 +72,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "cvsu-imus/student-portal/(.*)": "<rootDir>/libs/student-portal/src/$1",
-      "cvsu-imus/student-portal": "<rootDir>/libs/student-portal/src"
+      "cvsu-imus/student-portal/(.*)": "<rootDir>/libs/cvsu-imus-portal/src/$1",
+      "cvsu-imus/student-portal": "<rootDir>/libs/cvsu-imus-portal/src"
     }
   }
 }

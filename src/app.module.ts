@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { StudentPortalModule } from "cvsu-imus/student-portal";
+import { StudentPortalModule } from "libs/cvsu-imus-portal/src";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
