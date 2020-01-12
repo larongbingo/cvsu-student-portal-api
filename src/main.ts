@@ -1,4 +1,5 @@
 import { NestFactory } from "@nestjs/core";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import helmet from "helmet";
 import cors from "cors";
 
@@ -10,6 +11,16 @@ async function bootstrap() {
   app.use(cors({
     credentials: true,
   }));
+
+  const options = new DocumentBuilder()
+  .setTitle("CvSU Imus Web Portal API")
+  .setDescription("A Web Scraping API for CvSU Imus Web Portal")
+  .setVersion("0.1")
+  .build();
+
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup("/", app, document);
+
   await app.listen(3000);
 }
 bootstrap();
