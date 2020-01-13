@@ -61,8 +61,69 @@ export class ParsedStudentPortalService {
   }
 
   public async GetParsedProfile(sessionId: string) {
-    const response = await this.studentPortalService.GetStudentProfile(sessionId);
+    const response = await this.studentPortalService.GetStudentProfile(
+      sessionId,
+    );
     const $ = cheerio.load(response.data, { normalizeWhitespace: true });
+    const profile: IProfile = {
+      personalDetails: {
+        fullName: "",
+        birthDate: "",
+        sex: "",
+        religion: "",
+        civilStatus: "",
+      },
+      contactDetails: {
+        address: "",
+        emailAddress: "",
+        contactNumber: "",
+        guardian: "",
+      },
+      enrollmentDetails: {
+        course: "",
+        studentNumber: "",
+      },
+    };
+    $("input").each((i, ele) => {
+      switch (i) {
+        case 1:
+          profile.personalDetails.fullName = $(ele).attr("value");
+          break;
+        case 2:
+          profile.personalDetails.birthDate = $(ele).attr("value");
+          break;
+        case 3:
+          profile.personalDetails.sex = $(ele).attr("value");
+          break;
+        case 4:
+          profile.personalDetails.religion = $(ele).attr("value");
+          break;
+        case 5:
+          profile.personalDetails.civilStatus = $(ele).attr("value");
+          break;
+
+        case 6:
+          profile.contactDetails.address = $(ele).attr("value");
+          break;
+        case 7:
+          profile.contactDetails.guardian = $(ele).attr("value");
+          break;
+        case 8:
+          profile.contactDetails.contactNumber = $(ele).attr("value");
+          break;
+        case 9:
+          profile.contactDetails.emailAddress = $(ele).attr("value");
+          break;
+
+        case 10:
+          profile.enrollmentDetails.course = $(ele).attr("value");
+          break;
+        case 11:
+          profile.enrollmentDetails.studentNumber = $(ele).attr("value");
+          break;
+      }
+    });
+    return profile;
   }
 
   public async GetParsedAccountBalance(sessionId: string) {
