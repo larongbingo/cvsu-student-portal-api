@@ -10,12 +10,12 @@ export class ParsedStudentPortalService {
   public async GetParsedGrades(sessionId: string) {
     const response = await this.studentPortalService.GetGrades(sessionId);
     const $ = cheerio.load(response.data, { normalizeWhitespace: true });
-    const subjects = [];
+    const subjects: ISubject[] = [];
     $("#accordion").each((i, element) =>
       $(element)
         .find(".collapse .card-body .table-responsive small #grades tbody tr")
         .each((j, innerElement) => {
-          const subject = {
+          const subject: ISubject = {
             subjectCode: "",
             subjectTitle: "",
             grade: "",
