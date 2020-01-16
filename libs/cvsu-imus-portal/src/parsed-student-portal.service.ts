@@ -1,7 +1,8 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import cheerio from "cheerio";
 
 import { StudentPortalService } from "./student-portal.service";
+import { ISubject, IProfile } from "./student-portal-types";
 
 @Injectable()
 export class ParsedStudentPortalService {
@@ -56,7 +57,6 @@ export class ParsedStudentPortalService {
           subjects.push(subject);
         }),
     );
-    Logger.log(subjects);
     return subjects;
   }
 
@@ -127,12 +127,17 @@ export class ParsedStudentPortalService {
   }
 
   public async GetParsedAccountBalance(sessionId: string) {
-    const response = await this.studentPortalService.GetAccountBalance(sessionId);
+    const response = await this.studentPortalService.GetAccountBalance(
+      sessionId,
+    );
     const $ = cheerio.load(response.data, { normalizeWhitespace: true });
+    $("")
   }
 
   public async GetParsedEnrolledSubjects(sessionId: string) {
-    const response = await this.studentPortalService.GetEnrolledSubjects(sessionId);
+    const response = await this.studentPortalService.GetEnrolledSubjects(
+      sessionId,
+    );
     const $ = cheerio.load(response.data, { normalizeWhitespace: true });
   }
 }
