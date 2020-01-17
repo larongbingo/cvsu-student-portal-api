@@ -1,5 +1,5 @@
 import { Controller, Get, Query, Logger } from "@nestjs/common";
-import { ParsedStudentPortalService, ParsedPublicPortalService, StudentPortalService } from "cvsu-imus/student-portal";
+import { ParsedStudentPortalService, ParsedPublicPortalService, StudentPortalService, PublicPortalService } from "cvsu-imus/student-portal";
 
 @Controller()
 export class AppController {
@@ -7,6 +7,7 @@ export class AppController {
     private readonly studentPortalService: StudentPortalService,
     private readonly parsedStudentPortalService: ParsedStudentPortalService,
     private readonly parsedPublicPortalService: ParsedPublicPortalService,
+    private readonly publicPortalService: PublicPortalService,
   ) {}
 
   @Get("/login")
@@ -28,5 +29,17 @@ export class AppController {
   public async GetProfiles(@Query("sessionId") sessionId: string) {
     const profile = await this.parsedStudentPortalService.GetParsedProfile(sessionId);
     return { profile };
+  }
+
+  @Get("/studentsEnrolled")
+  public async GetEnrolledStudentsInSchedule(@Query("scheduleCode") scheduleCode: number) {
+    const students = await this.parsedPublicPortalService.GetParsedStudentsEnrolledInSubject(scheduleCode);
+    return { students };
+  }
+
+  @Get("/subjects")
+  public async GetSubjects(@Query("startingId") startingId: number, @Query("length") length: number) {
+    const subjects = await this.publicPortalService.GetListOfSubjects(startingId, length);
+    return { subjects: subjects.data.aaData };
   }
 }
