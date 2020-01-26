@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Logger } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 import { ParsedStudentPortalService, ParsedPublicPortalService, StudentPortalService, PublicPortalService } from "cvsu-imus/student-portal";
 
 @Controller()
@@ -29,6 +29,18 @@ export class AppController {
   public async GetProfiles(@Query("sessionId") sessionId: string) {
     const profile = await this.parsedStudentPortalService.GetParsedProfile(sessionId);
     return { profile };
+  }
+
+  @Get("/balance")
+  public async GetBalance(@Query("sessionId") sessionId: string) {
+    const balance = await this.parsedStudentPortalService.GetParsedAccountBalance(sessionId);
+    return { balance };
+  }
+
+  @Get("/enrolledSubjects")
+  public async GetEnrolledSubject(@Query("sessionId") sessionId: string) {
+    const enrolledSubjects = await this.parsedStudentPortalService.GetParsedEnrolledSubjects(sessionId);
+    return { enrolledSubjects };
   }
 
   @Get("/studentsEnrolled")

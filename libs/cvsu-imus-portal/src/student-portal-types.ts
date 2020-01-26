@@ -46,3 +46,10 @@ export interface IEnrolledSubject {
   section: string;
   instructor: string;
 }
+
+export interface IBalance {
+  fees: string;
+  amount: number;
+  paid: number;
+  balance: number;
+}
