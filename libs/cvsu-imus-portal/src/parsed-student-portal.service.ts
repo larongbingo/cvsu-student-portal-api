@@ -3,7 +3,12 @@ import cheerio from "cheerio";
 
 import { RemoveSpecialCharsOnStringNum } from "./lib";
 import { StudentPortalService } from "./student-portal.service";
-import { ISubject, IProfile, IBalance, IEnrolledSubject } from "./student-portal-types";
+import {
+  ISubject,
+  IProfile,
+  IBalance,
+  IEnrolledSubject,
+} from "./student-portal-types";
 
 @Injectable()
 export class ParsedStudentPortalService {
@@ -133,31 +138,35 @@ export class ParsedStudentPortalService {
     );
     const balance: IBalance[] = [];
     const $ = cheerio.load(response.data, { normalizeWhitespace: true });
-    $("tbody").children().each((_, ele) => {
-      const bal: IBalance = {
-        fees: "",
-        amount: null,
-        balance: null,
-        paid: null,
-      };
-      $(ele).children().each((i, innerEle) => {
-        switch (i) {
-          case 0:
-            bal.fees = $(innerEle).text();
-            break;
-          case 1:
-            bal.amount = RemoveSpecialCharsOnStringNum($(innerEle).text());
-            break;
-          case 2:
-            bal.paid = RemoveSpecialCharsOnStringNum($(innerEle).text());
-            break;
-          case 3:
-            bal.balance = RemoveSpecialCharsOnStringNum($(innerEle).text());
-            break;
-        }
+    $("tbody")
+      .children()
+      .each((_, ele) => {
+        const bal: IBalance = {
+          fees: "",
+          amount: null,
+          balance: null,
+          paid: null,
+        };
+        $(ele)
+          .children()
+          .each((i, innerEle) => {
+            switch (i) {
+              case 0:
+                bal.fees = $(innerEle).text();
+                break;
+              case 1:
+                bal.amount = RemoveSpecialCharsOnStringNum($(innerEle).text());
+                break;
+              case 2:
+                bal.paid = RemoveSpecialCharsOnStringNum($(innerEle).text());
+                break;
+              case 3:
+                bal.balance = RemoveSpecialCharsOnStringNum($(innerEle).text());
+                break;
+            }
+          });
+        balance.push(bal);
       });
-      balance.push(bal);
-    });
     return balance;
   }
 
@@ -167,50 +176,64 @@ export class ParsedStudentPortalService {
     );
     const $ = cheerio.load(response.data, { normalizeWhitespace: true });
     const enrolledSubjects: IEnrolledSubject[] = [];
-    $("tbody").children().each((_, ele) => {
-      const enrolledSubject: IEnrolledSubject = {
-        schedule: [],
-        scheduleCode: "",
-        subjectCode: "",
-        subjectTitle: "",
-        section: "",
-        instructor: "",
-      };
-      $(ele).children().each((i, innerEle) => {
-        const val = $(innerEle).html().trim();
-        switch (i) {
-          case 0:
-            enrolledSubject.scheduleCode = val;
-            break;
-          case 1:
-            enrolledSubject.subjectCode = val;
-            break;
-          case 2:
-            enrolledSubject.subjectTitle = val;
-            break;
-          case 3:
-            val.split("<br>").forEach(time => enrolledSubject.schedule.push({
-              time,
-              day: "",
-              room: "",
-            }));
-            break;
-          case 4:
-            val.split("<br>").forEach((day, j) => enrolledSubject.schedule[j].day = day);
-            break;
-          case 5:
-            val.split("<br>").forEach((room, j) => enrolledSubject.schedule[j].room = room);
-            break;
-          case 6:
-            enrolledSubject.section = val;
-            break;
-          case 7:
-            enrolledSubject.instructor = val;
-            break;
-        }
+    $("tbody")
+      .children()
+      .each((_, ele) => {
+        const enrolledSubject: IEnrolledSubject = {
+          schedule: [],
+          scheduleCode: "",
+          subjectCode: "",
+          subjectTitle: "",
+          section: "",
+          instructor: "",
+        };
+        $(ele)
+          .children()
+          .each((i, innerEle) => {
+            const val = $(innerEle)
+              .html()
+              .trim();
+            switch (i) {
+              case 0:
+                enrolledSubject.scheduleCode = val;
+                break;
+              case 1:
+                enrolledSubject.subjectCode = val;
+                break;
+              case 2:
+                enrolledSubject.subjectTitle = val;
+                break;
+              case 3:
+                val.split("<br>").forEach(time =>
+                  enrolledSubject.schedule.push({
+                    time,
+                    day: "",
+                    room: "",
+                  }),
+                );
+                break;
+              case 4:
+                val
+                  .split("<br>")
+                  .forEach((day, j) => (enrolledSubject.schedule[j].day = day));
+                break;
+              case 5:
+                val
+                  .split("<br>")
+                  .forEach(
+                    (room, j) => (enrolledSubject.schedule[j].room = room),
+                  );
+                break;
+              case 6:
+                enrolledSubject.section = val;
+                break;
+              case 7:
+                enrolledSubject.instructor = val;
+                break;
+            }
+          });
+        enrolledSubjects.push(enrolledSubject);
       });
-      enrolledSubjects.push(enrolledSubject);
-    });
     return enrolledSubjects;
   }
 }

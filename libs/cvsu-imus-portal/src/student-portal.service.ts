@@ -32,7 +32,7 @@ export class StudentPortalService {
     const response = await this.httpService
       .post<string>(LOGIN_URL, stringify(loginFormData), {
         headers: {
-          "Referer": "https://cvsu-imus.edu.ph/student-portal/index",
+          Referer: "https://cvsu-imus.edu.ph/student-portal/index",
           "Content-Type": "application/x-www-form-urlencoded",
         },
       })

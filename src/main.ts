@@ -8,15 +8,17 @@ import { AppModule } from "./app.module";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
-  app.use(cors({
-    credentials: true,
-  }));
+  app.use(
+    cors({
+      credentials: true,
+    }),
+  );
 
   const options = new DocumentBuilder()
-  .setTitle("CvSU Imus Web Portal API")
-  .setDescription("A Web Scraping API for CvSU Imus Web Portal")
-  .setVersion("0.1")
-  .build();
+    .setTitle("CvSU Imus Web Portal API")
+    .setDescription("A Web Scraping API for CvSU Imus Web Portal")
+    .setVersion("0.1")
+    .build();
 
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup("/", app, document);
