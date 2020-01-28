@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Trash CvSU Imus Portal</title>
+</head>
+
+<body>
+  <div>
+    <h2>Log In to get details</h2>
+    <label>Student Number</label>
+    <input type="text" name="studNum" id="studNum">
+    <br>
+    <label>Password</label>
+    <input type="password" name="password" id="password">
+    <br>
+    <button id="login_btn">Log In</button>
+  </div>
+
+  <a href="/docs/apis">APIs Docs</a>
+
+  <h3 style="margin-bottom: 0;">Session Token</h3>
+  <p style="margin-top: 0;" id="sessionId"></p>
+
+  <div>
+    <h2>User Details</h2>
+    <div>
+      <h3>Personal Details</h3>
+      <p>Full Name: <span id="fullName"></span></p>
+      <p>Birth Date: <span id="birthDate"></span></p>
+      <p>Sex/Gender: <span id="sex"></span></p>
+      <p>Religion: <span id="religion"></span></p>
+      <p>Civil Status: <span id="civilStatus"></span></p>
+
+      <h3>Contact Details</h3>
+      <p>Address: <span id="address"></span></p>
+      <p>Guardian: <span id="guardian"></span></p>
+      <p>Contact Number: <span id="contactNumber"></span></p>
+      <p>Email Address: <span id="email"></span></p>
+
+      <h3>Enrollment Details</h3>
+      <p>Course: <span id="course"></span></p>
+      <p>Student Number: <span id="studentNumber"></span></p>
+    </div>
+  </div>
+
+  <div>
+    <h2>Grades</h2>
+    <table>
+      <thead>
+        <th>Subject Code</th>
+        <th>Subject Title</th>
+        <th>Grade</th>
+        <th>Completion</th>
+        <th>Unit</th>
+        <th>Credit Unit</th>
+      </thead>
+      <tbody id="gradeTable"></tbody>
+    </table>
+  </div>
+
+  <div>
+    <h2>Account Balance</h2>
+    <table>
+      <thead>
+        <th>Fee</th>
+        <th>Amount</th>
+        <th>Balance</th>
+        <th>Paid</th>
+      </thead>
+      <tbody id="balanceTable"></tbody>
+    </table>
+  </div>
+
+  <script>
+    document.getElementById("login_btn").onclick = async () => {
+      let studNum = document.getElementById("studNum").value;
+      let password = document.getElementById("password").value;
+      let sessionToken = ""; 
+      {
+        const res = await fetch(
+          `https://cvsu-imus-web-portal-apis.herokuapp.com/login?studNum=${studNum}&password=${password}`);
+        const _sessionToken = await res.json();
+        sessionToken = _sessionToken.sessionId;
+        document.getElementById("sessionId").innerText = _sessionToken.sessionId;
+      }
+
+      {
+        let res = await fetch(`https://cvsu-imus-web-portal-apis.herokuapp.com/profile?sessionId=${sessionToken}`);
+        let profile = await res.json();
+        console.log(profile);
+        document.getElementById("fullName").innerText = profile.profile.personalDetails.fullName;
+        document.getElementById("birthDate").innerText = profile.profile.personalDetails.birthDate;
+        document.getElementById("sex").innerText = profile.profile.personalDetails.sex;
+        document.getElementById("religion").innerText = profile.profile.personalDetails.religion;
+        document.getElementById("civilStatus").innerText = profile.profile.personalDetails.civilStatus;
+
+        document.getElementById("address").innerText = profile.profile.contactDetails.address;
+        document.getElementById("email").innerText = profile.profile.contactDetails.emailAddress;
+        document.getElementById("contactNumber").innerText = profile.profile.contactDetails.contactNumber;
+        document.getElementById("guardian").innerText = profile.profile.contactDetails.guardian;
+
+        document.getElementById("course").innerText = profile.profile.enrollmentDetails.course;
+        document.getElementById("studentNumber").innerText = profile.profile.enrollmentDetails.studentNumber;
+      }
+
+      {
+        const res = await fetch(`https://cvsu-imus-web-portal-apis.herokuapp.com/grades?sessionId=${sessionToken}`);
+        const grades = await res.json();
+        let str = "";
+        for (const grade of grades.grades) {
+          let row = "<tr>";
+          Object.keys(grade).forEach((key) => row += "<td>" + grade[key] + "</td>");
+          row += "</tr>";
+          str += row;
+        }
+        document.getElementById("gradeTable").innerHTML = str;
+      }
+      
+      {
+        const res = await fetch(`https://cvsu-imus-web-portal-apis.herokuapp.com/balance?sessionId=${sessionToken}`);
+        const balance = await res.json();
+        let str = "";
+        for(const bal of balance.balance) {
+          let row = "<tr>";
+          Object.keys(bal).forEach((key) => str += "<td>" + bal[key] + "</td>");
+          row += "</tr>";
+          str += row;
+        }
+        console.log(balance);
+        document.getElementById("balanceTable").innerHTML = str;
+      }
+    };
+  </script>
+</body>
+
+</html>
